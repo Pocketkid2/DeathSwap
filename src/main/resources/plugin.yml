@@ -1,0 +1,17 @@
+name: ${name}
+version: ${version}
+main: ${groupId}.${artifactId}.${name}Plugin
+description: ${description}
+api-version: 1.18
+author: ${author}
+commands:
+    deathswap:
+        description: Base command
+        usage: /<command> join|start|quit
+        permission: deathswap.command
+        permission-message: You don't have permission for that!
+        aliases: [ds]
+permissions:
+    deathswap.command:
+        description: Base command permission
+        default: true

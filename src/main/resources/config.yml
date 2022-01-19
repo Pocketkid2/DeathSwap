@@ -1,0 +1,18 @@
+#
+# Configuration file for DeathSwap!
+#
+
+# The name of the world to use
+world: deathswap
+
+# The radius from the origin to distribute players around
+radius: 5000
+
+# How many seconds the game start countdown should be
+starting-time: 10
+
+# How many seconds between each swap (default is 300 or 5 minutes)
+swap-time: 300
+
+# The location of the lobby spawn (don't touch this, use the command and reload the plugin)
+lobby-spawn:
