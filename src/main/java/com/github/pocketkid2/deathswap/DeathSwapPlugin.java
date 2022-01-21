@@ -16,6 +16,7 @@ public class DeathSwapPlugin extends JavaPlugin {
 	private int radius;
 	private int startingTimeSecs;
 	private int swapTimeSecs;
+	private int firstSwapSecs;
 	private Location lobby;
 
 	@Override
@@ -43,6 +44,8 @@ public class DeathSwapPlugin extends JavaPlugin {
 		getLogger().info("Starting time loaded as " + startingTimeSecs + " seconds");
 		swapTimeSecs = getConfig().getInt("swap-time");
 		getLogger().info("Swap time loaded as " + swapTimeSecs + " seconds");
+		firstSwapSecs = getConfig().getInt("first-swap");
+		getLogger().info("First swap time loaded as " + firstSwapSecs + " seconds");
 
 		// Load the lobby location
 		lobby = getConfig().getLocation("lobby-spawn", null);
@@ -67,6 +70,10 @@ public class DeathSwapPlugin extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		// Set values that may have changed
+		getConfig().set("world", world != null ? world.getName() : null);
+		getConfig().set("lobby-spawn", lobby != null ? lobby : null);
+
 		// Any changes made, save to disk
 		saveConfig();
 
@@ -109,5 +116,17 @@ public class DeathSwapPlugin extends JavaPlugin {
 
 	public void setWorld(World w) {
 		world = w;
+	}
+
+	public int getStartingTimeSecs() {
+		return startingTimeSecs;
+	}
+
+	public int getSwapTimeSecs() {
+		return swapTimeSecs;
+	}
+
+	public int getFirstSwapSecs() {
+		return firstSwapSecs;
 	}
 }

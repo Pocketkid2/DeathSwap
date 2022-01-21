@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -24,7 +25,9 @@ public class DeathSwapListener implements Listener {
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent event) {
 		if (plugin.getGame().isPlayer(event.getEntity())) {
+			plugin.getLogger().info("Logging death swap death for player " + event.getEntity());
 			event.setDeathMessage(null);
+			event.getEntity().getInventory().clear();
 			respawns.add(event.getEntity());
 			plugin.getGame().removePlayer(event.getEntity());
 			plugin.broadcast(event.getEntity().getDisplayName() + " died while playing Death Swap!");
@@ -40,6 +43,7 @@ public class DeathSwapListener implements Listener {
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		if (plugin.getGame().isPlayer(event.getPlayer())) {
+			plugin.getLogger().info("Logging player quit event for player " + event.getPlayer());
 			event.setQuitMessage(null);
 			plugin.getGame().removePlayer(event.getPlayer());
 			plugin.broadcast(event.getPlayer().getDisplayName() + " left the server while playing Death Swap!");
@@ -52,9 +56,10 @@ public class DeathSwapListener implements Listener {
 		}
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
 		if (respawns.contains(event.getPlayer())) {
+			plugin.getLogger().info("Logging player respawn event for player " + event.getPlayer());
 			event.setRespawnLocation(plugin.getLobby());
 			respawns.remove(event.getPlayer());
 		}

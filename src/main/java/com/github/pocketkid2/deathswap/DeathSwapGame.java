@@ -21,6 +21,7 @@ public class DeathSwapGame {
 	private Status status;
 	private List<Player> votes;
 	private BukkitTask task;
+	private List<Player> spectators;
 
 	public DeathSwapGame(DeathSwapPlugin p) {
 		plugin = p;
@@ -28,6 +29,7 @@ public class DeathSwapGame {
 		status = Status.WAITING;
 		task = null;
 		votes = new ArrayList<Player>();
+		spectators = new ArrayList<Player>();
 	}
 
 	public void cancelTask() {
@@ -108,7 +110,7 @@ public class DeathSwapGame {
 				broadcast(ChatColor.AQUA + "All players are ready, game now starting!");
 				status = Status.STARTING;
 				plugin.broadcast(ChatColor.AQUA + "The Death Swap game is starting!");
-				new DeathSwapTimer(plugin, 10, "The game will start in %d %s", Job.START_GAME).runTaskTimer(plugin, 20, 20);
+				new DeathSwapTimer(plugin, plugin.getStartingTimeSecs(), "The game will start in %d %s", Job.START_GAME).runTaskTimer(plugin, 20, 20);
 				clearVotes();
 			}
 		} else {
@@ -117,13 +119,28 @@ public class DeathSwapGame {
 	}
 
 	public void processPlayerRemoved() {
-		if ((getStatus() == Status.IN_GAME) && (players.size() < 2)) {
+		if (players.size() < 2) {
 			Player winner = players.get(0);
 			winner.sendMessage(ChatColor.GREEN + "You won Death Swap!");
 			plugin.broadcast(ChatColor.GREEN + winner.getDisplayName() + " won Death Swap!");
 			winner.teleport(plugin.getLobby());
+			winner.getInventory().clear();
 			clearPlayers();
 			cancelTask();
+			status = Status.WAITING;
+			for (Player p : spectators) {
+				p.teleport(plugin.getLobby());
+				p.sendMessage(ChatColor.GREEN + "The Death Swap game is over, " + winner.getDisplayName() + " won the game!");
+			}
+			spectators.clear();
 		}
+	}
+
+	public void setStatus(Status s) {
+		status = s;
+	}
+
+	public void addSpectator(Player player) {
+		spectators.add(player);
 	}
 }

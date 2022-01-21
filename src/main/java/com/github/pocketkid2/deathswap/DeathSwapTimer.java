@@ -9,6 +9,8 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.github.pocketkid2.deathswap.DeathSwapGame.Status;
+
 public class DeathSwapTimer extends BukkitRunnable {
 
 	public enum Job {
@@ -42,12 +44,16 @@ public class DeathSwapTimer extends BukkitRunnable {
 		} else {
 			switch (job) {
 			case START_GAME:
-				plugin.getGame().broadcast("Starting game!");
+				plugin.getGame().setStatus(Status.IN_GAME);
+				plugin.getGame().broadcast("Starting game, " + (plugin.getFirstSwapSecs() / 60) + " minutes until first swap!");
 				plugin.broadcast("Death Swap game is starting");
 				for (Player p : plugin.getGame().getPlayers()) {
 					p.teleport(getRandomLocationInWorld(plugin.getWorld()));
+					p.setHealth(20);
+					p.setFoodLevel(20);
+					p.setExp(0);
 				}
-				plugin.getGame().setTask(new DeathSwapTimer(plugin, 300, "Swapping players in %s %s", Job.SWAP).runTaskTimer(plugin, 20, 20));
+				plugin.getGame().setTask(new DeathSwapTimer(plugin, plugin.getFirstSwapSecs(), "Swapping players in %s %s", Job.SWAP).runTaskTimer(plugin, 20, 20));
 				cancel();
 				break;
 			case SWAP:
@@ -59,7 +65,7 @@ public class DeathSwapTimer extends BukkitRunnable {
 				for (int i = 0; i < plugin.getGame().getPlayers().size(); i++) {
 					plugin.getGame().getPlayers().get(i).teleport(locs.get(i));
 				}
-				plugin.getGame().setTask(new DeathSwapTimer(plugin, 300, "Swapping players in %s %s", Job.SWAP).runTaskTimer(plugin, 20, 20));
+				plugin.getGame().setTask(new DeathSwapTimer(plugin, plugin.getSwapTimeSecs(), "Swapping players in %s %s", Job.SWAP).runTaskTimer(plugin, 20, 20));
 				cancel();
 				break;
 			default:
