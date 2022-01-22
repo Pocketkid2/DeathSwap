@@ -29,13 +29,14 @@ public class DeathSwapStartCommand extends DeathSwapSubCommand {
 				plugin.getGame().playerVote(player);
 				plugin.getGame().broadcastExcept(player,
 						ChatColor.AQUA + "Player " + player.getDisplayName() + " has voted to start the game! (" + plugin.getGame().getVotes() + "/" + plugin.getGame().getPlayers().size() + ")");
-				player.sendMessage(ChatColor.AQUA + "You have voted to start the game! (" + plugin.getGame().getVotes() + "/" + plugin.getGame().getPlayers().size() + ")");
+				player.sendMessage(plugin.addPrefix(ChatColor.AQUA + "You have voted to start the game! (" + ChatColor.GREEN + plugin.getGame().getVotes() + ChatColor.AQUA + "/" + ChatColor.GREEN
+						+ plugin.getGame().getPlayers().size() + ChatColor.AQUA + ")"));
 				plugin.getGame().processVote();
 			} else {
-				player.sendMessage(ChatColor.RED + "The plugin has not been fully set up yet, please talk to an admin");
+				player.sendMessage(plugin.addPrefix(ChatColor.RED + "The plugin has not been fully set up yet, please talk to an admin"));
 			}
 		} else {
-			player.sendMessage(ChatColor.RED + "You can only vote to start the game if you're in a game that's waiting to start!");
+			player.sendMessage(plugin.addPrefix(ChatColor.RED + "You can only vote to start the game if you're in a game that's waiting to start!"));
 		}
 	}
 

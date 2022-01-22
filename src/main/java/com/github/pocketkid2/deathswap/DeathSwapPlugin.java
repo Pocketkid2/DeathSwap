@@ -2,6 +2,7 @@ package com.github.pocketkid2.deathswap;
 
 import java.util.stream.Collectors;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -93,7 +94,7 @@ public class DeathSwapPlugin extends JavaPlugin {
 	public void broadcast(String s) {
 		for (Player p : getServer().getOnlinePlayers().stream().collect(Collectors.toList())) {
 			if (!game.isPlayer(p)) {
-				p.sendMessage(s);
+				p.sendMessage(addPrefix(s));
 			}
 		}
 	}
@@ -128,5 +129,9 @@ public class DeathSwapPlugin extends JavaPlugin {
 
 	public int getFirstSwapSecs() {
 		return firstSwapSecs;
+	}
+
+	public String addPrefix(String message) {
+		return String.format("[%s%s%s] %s", ChatColor.RED, getDescription().getPrefix(), ChatColor.RESET, message);
 	}
 }

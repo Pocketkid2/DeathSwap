@@ -25,6 +25,7 @@ public class DeathSwapCommand implements CommandExecutor {
 		subs.add(new DeathSwapSetLobbyCommand(plugin));
 		subs.add(new DeathSwapSetWorldCommand(plugin));
 		subs.add(new DeathSwapSpectateCommand(plugin));
+		subs.add(new DeathSwapListCommand(plugin));
 	}
 
 	@Override

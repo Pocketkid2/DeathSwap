@@ -1,20 +1,25 @@
 package com.github.pocketkid2.deathswap;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.github.pocketkid2.deathswap.DeathSwapGame.Status;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class DeathSwapTimer extends BukkitRunnable {
 
 	public enum Job {
-		START_GAME, SWAP;
+		START_GAME, SWAP, SETUP;
 	}
 
 	private DeathSwapPlugin plugin;
@@ -49,25 +54,40 @@ public class DeathSwapTimer extends BukkitRunnable {
 				plugin.broadcast("Death Swap game is starting");
 				for (Player p : plugin.getGame().getPlayers()) {
 					p.teleport(getRandomLocationInWorld(plugin.getWorld()));
-					p.setHealth(20);
-					p.setFoodLevel(20);
-					p.setExp(0);
 				}
 				plugin.getGame().setTask(new DeathSwapTimer(plugin, plugin.getFirstSwapSecs(), "Swapping players in %s %s", Job.SWAP).runTaskTimer(plugin, 20, 20));
+				new DeathSwapTimer(plugin, 0, "", Job.SETUP).runTask(plugin);
 				cancel();
 				break;
 			case SWAP:
-				plugin.getGame().broadcast("Swapping players!");
 				List<Location> locs = plugin.getGame().getPlayers().stream().map(Player::getLocation).collect(Collectors.toList());
+				List<Player> swaps = new ArrayList<>(plugin.getGame().getPlayers());
 				Location first = locs.get(0);
+				Player p1 = swaps.get(0);
 				locs.remove(0);
+				swaps.remove(0);
 				locs.add(first);
+				swaps.add(p1);
 				for (int i = 0; i < plugin.getGame().getPlayers().size(); i++) {
-					plugin.getGame().getPlayers().get(i).teleport(locs.get(i));
+					Player p = plugin.getGame().getPlayers().get(i);
+					p.teleport(locs.get(i));
+					p.sendMessage(plugin.addPrefix(ChatColor.AQUA + "You are being swapped with " + ChatColor.RESET + swaps.get(i).getDisplayName()));
 				}
 				plugin.getGame().setTask(new DeathSwapTimer(plugin, plugin.getSwapTimeSecs(), "Swapping players in %s %s", Job.SWAP).runTaskTimer(plugin, 20, 20));
 				cancel();
 				break;
+			case SETUP:
+				plugin.getWorld().setTime(0);
+				for (Player p : plugin.getGame().getPlayers()) {
+					p.setGameMode(GameMode.SURVIVAL);
+					p.setHealth(20);
+					p.setFoodLevel(20);
+					p.setExp(0);
+					for (PotionEffect pe : p.getActivePotionEffects()) {
+						p.removePotionEffect(pe.getType());
+					}
+					p.getInventory().clear();
+				}
 			default:
 				break;
 
@@ -80,7 +100,9 @@ public class DeathSwapTimer extends BukkitRunnable {
 		int randX = random.nextInt(plugin.getRadius() * 2) - plugin.getRadius();
 		int randZ = random.nextInt(plugin.getRadius() * 2) - plugin.getRadius();
 		int y = world.getHighestBlockYAt(randX, randZ) + 1;
-		return new Location(world, randX, y, randZ);
+		if (!new Location(world, randX, y, randZ).getBlock().getBiome().toString().contains("OCEAN"))
+			return new Location(world, randX, y, randZ);
+		return getRandomLocationInWorld(world);
 	}
 
 }

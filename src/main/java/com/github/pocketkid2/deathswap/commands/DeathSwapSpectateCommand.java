@@ -2,6 +2,7 @@ package com.github.pocketkid2.deathswap.commands;
 
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.github.pocketkid2.deathswap.DeathSwapGame.Status;
 import com.github.pocketkid2.deathswap.DeathSwapPlugin;
@@ -37,7 +38,14 @@ public class DeathSwapSpectateCommand extends DeathSwapSubCommand {
 		}
 
 		player.teleport(plugin.getGame().getPlayers().get(0).getLocation());
-		player.setGameMode(GameMode.SPECTATOR);
+		new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				player.setGameMode(GameMode.SPECTATOR);
+			}
+		}.runTaskLater(plugin, 20);
+
 		player.sendMessage(ChatColor.AQUA + "You are now spectating the game!");
 		plugin.getGame().addSpectator(player);
 	}

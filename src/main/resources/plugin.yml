@@ -1,4 +1,5 @@
 name: ${name}
+prefix: ${name}
 version: ${version}
 main: ${groupId}.${artifactId}.${name}Plugin
 description: ${description}

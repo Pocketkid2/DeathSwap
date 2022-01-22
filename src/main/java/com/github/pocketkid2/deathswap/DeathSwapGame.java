@@ -47,14 +47,14 @@ public class DeathSwapGame {
 
 	public void broadcast(String message) {
 		for (Player p : players) {
-			p.sendMessage(message);
+			p.sendMessage(plugin.addPrefix(message));
 		}
 	}
 
 	public void broadcastExcept(Player player, String message) {
 		for (Player p : players) {
 			if (p != player) {
-				p.sendMessage(message);
+				p.sendMessage(plugin.addPrefix(message));
 			}
 		}
 	}
@@ -114,15 +114,15 @@ public class DeathSwapGame {
 				clearVotes();
 			}
 		} else {
-			players.get(0).sendMessage(ChatColor.RED + "The game cannot start until there are at least two players!");
+			players.get(0).sendMessage(plugin.addPrefix(ChatColor.RED + "The game cannot start until there are at least two players!"));
 		}
 	}
 
 	public void processPlayerRemoved() {
 		if (players.size() < 2) {
 			Player winner = players.get(0);
-			winner.sendMessage(ChatColor.GREEN + "You won Death Swap!");
-			plugin.broadcast(ChatColor.GREEN + winner.getDisplayName() + " won Death Swap!");
+			winner.sendMessage(plugin.addPrefix(ChatColor.GREEN + "You won Death Swap!"));
+			plugin.broadcast(winner.getDisplayName() + ChatColor.GREEN + " won Death Swap!");
 			winner.teleport(plugin.getLobby());
 			winner.getInventory().clear();
 			clearPlayers();
@@ -130,7 +130,7 @@ public class DeathSwapGame {
 			status = Status.WAITING;
 			for (Player p : spectators) {
 				p.teleport(plugin.getLobby());
-				p.sendMessage(ChatColor.GREEN + "The Death Swap game is over, " + winner.getDisplayName() + " won the game!");
+				p.sendMessage(plugin.addPrefix(ChatColor.GREEN + "The Death Swap game is over, " + winner.getDisplayName() + " won the game!"));
 			}
 			spectators.clear();
 		}
@@ -142,5 +142,9 @@ public class DeathSwapGame {
 
 	public void addSpectator(Player player) {
 		spectators.add(player);
+	}
+
+	public boolean isSpectator(Player player) {
+		return spectators.contains(player);
 	}
 }
