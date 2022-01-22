@@ -25,15 +25,15 @@ public class DeathSwapJoinCommand extends DeathSwapSubCommand {
 	public void execute(Player player) {
 		switch (plugin.getGame().getStatus()) {
 		case IN_GAME:
-			player.sendMessage(ChatColor.RED + "The game is already in progress, you can't join now!");
+			player.sendMessage(plugin.addPrefix(ChatColor.RED + "The game is already in progress, you can't join now!"));
 			break;
 		case STARTING:
 		case WAITING:
 			if (plugin.getGame().addPlayer(player)) {
 				player.sendMessage(ChatColor.AQUA + "You have joined the game!");
-				plugin.getGame().broadcast(ChatColor.AQUA + player.getDisplayName() + " has joined the game (" + plugin.getGame().getPlayers().size() + ")");
+				plugin.getGame().broadcast(ChatColor.AQUA + player.getDisplayName() + " has joined the game (" + ChatColor.GREEN + plugin.getGame().getPlayers().size() + ChatColor.AQUA + ")");
 			} else {
-				player.sendMessage(ChatColor.RED + "You are already in the game!");
+				player.sendMessage(plugin.addPrefix(ChatColor.RED + "You are already in the game!"));
 			}
 			break;
 		}

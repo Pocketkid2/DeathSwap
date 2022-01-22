@@ -50,12 +50,13 @@ public class DeathSwapTimer extends BukkitRunnable {
 			switch (job) {
 			case START_GAME:
 				plugin.getGame().setStatus(Status.IN_GAME);
-				plugin.getGame().broadcast("Starting game, " + (plugin.getFirstSwapSecs() / 60) + " minutes until first swap!");
+				plugin.getGame().broadcast(ChatColor.AQUA + "Starting game, " + ChatColor.DARK_AQUA + (plugin.getFirstSwapSecs() / 60) + ChatColor.AQUA + " minutes until first swap!");
 				plugin.broadcast("Death Swap game is starting");
 				for (Player p : plugin.getGame().getPlayers()) {
 					p.teleport(getRandomLocationInWorld(plugin.getWorld()));
 				}
-				plugin.getGame().setTask(new DeathSwapTimer(plugin, plugin.getFirstSwapSecs(), "Swapping players in %s %s", Job.SWAP).runTaskTimer(plugin, 20, 20));
+				plugin.getGame().setTask(new DeathSwapTimer(plugin, plugin.getFirstSwapSecs(), ChatColor.AQUA + "Swapping players in " + ChatColor.DARK_AQUA + "%s" + ChatColor.AQUA + " %s", Job.SWAP)
+						.runTaskTimer(plugin, 20, 20));
 				new DeathSwapTimer(plugin, 0, "", Job.SETUP).runTask(plugin);
 				cancel();
 				break;

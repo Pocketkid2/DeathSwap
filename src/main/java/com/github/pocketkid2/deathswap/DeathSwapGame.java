@@ -110,7 +110,8 @@ public class DeathSwapGame {
 				broadcast(ChatColor.AQUA + "All players are ready, game now starting!");
 				status = Status.STARTING;
 				plugin.broadcast(ChatColor.AQUA + "The Death Swap game is starting!");
-				new DeathSwapTimer(plugin, plugin.getStartingTimeSecs(), "The game will start in %d %s", Job.START_GAME).runTaskTimer(plugin, 20, 20);
+				new DeathSwapTimer(plugin, plugin.getStartingTimeSecs(), ChatColor.AQUA + "The game will start in " + ChatColor.DARK_AQUA + "%d" + ChatColor.AQUA + " %s", Job.START_GAME)
+						.runTaskTimer(plugin, 20, 20);
 				clearVotes();
 			}
 		} else {
@@ -134,6 +135,25 @@ public class DeathSwapGame {
 			}
 			spectators.clear();
 		}
+	}
+
+	public void forceStop() {
+		broadcast(ChatColor.GREEN + "The game is being force stopped");
+		for (Player p : players) {
+			p.teleport(plugin.getLobby());
+			p.getInventory().clear();
+			p.setHealth(20);
+			p.setFoodLevel(20);
+			p.setExp(0);
+		}
+		cancelTask();
+		status = Status.WAITING;
+		for (Player p : spectators) {
+			p.teleport(plugin.getLobby());
+			p.sendMessage(plugin.addPrefix(ChatColor.GREEN + "The Death Swap game has been force stopped"));
+		}
+		clearPlayers();
+		spectators.clear();
 	}
 
 	public void setStatus(Status s) {

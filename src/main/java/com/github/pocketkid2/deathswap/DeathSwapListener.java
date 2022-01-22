@@ -36,7 +36,7 @@ public class DeathSwapListener implements Listener {
 			if (plugin.getGame().isPlayer(player) && ((player.getHealth() - event.getDamage()) <= 0)) {
 				plugin.broadcast(player.getDisplayName() + ChatColor.AQUA + " died while playing Death Swap (" + ChatColor.GOLD + event.getCause().toString() + ChatColor.AQUA + ")");
 				plugin.getGame().broadcast(player.getDisplayName() + ChatColor.AQUA + " died (" + ChatColor.GOLD + event.getCause().toString() + ChatColor.AQUA + ")");
-				if (plugin.getGame().getPlayers().size() > 1) {
+				if (plugin.getGame().getPlayers().size() > 2) {
 					plugin.getGame().broadcast(ChatColor.GREEN + "" + (plugin.getGame().getPlayers().size() - 1) + ChatColor.AQUA + " players remaining!");
 				}
 			}
