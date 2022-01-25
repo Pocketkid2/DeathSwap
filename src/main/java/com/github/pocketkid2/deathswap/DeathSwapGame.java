@@ -123,7 +123,7 @@ public class DeathSwapGame {
 		if (players.size() < 2) {
 			Player winner = players.get(0);
 			winner.sendMessage(plugin.addPrefix(ChatColor.GREEN + "You won Death Swap!"));
-			plugin.broadcast(winner.getDisplayName() + ChatColor.GREEN + " won Death Swap!");
+			plugin.broadcast(ChatColor.GREEN + winner.getDisplayName() + ChatColor.GREEN + " won Death Swap!");
 			winner.teleport(plugin.getLobby());
 			winner.getInventory().clear();
 			clearPlayers();

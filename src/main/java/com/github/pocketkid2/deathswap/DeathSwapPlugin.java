@@ -29,7 +29,7 @@ public class DeathSwapPlugin extends JavaPlugin {
 	private int firstSwapSecs;
 	private boolean randomItems;
 	private boolean blitzMode;
-	
+
 	private Map<Material, Material> dropMap;
 
 	@Override
@@ -73,13 +73,14 @@ public class DeathSwapPlugin extends JavaPlugin {
 		getLogger().info("Random items feature is turned " + (randomItems ? "on" : "off"));
 		blitzMode = getConfig().getBoolean("blitz-mode");
 		getLogger().info("Blitz mode is turned " + (blitzMode ? "on" : "off"));
-		
+
 		if (randomItems) {
 			dropMap = new HashMap<Material, Material>();
 			List<Material> list1 = Arrays.asList(Material.values());
 			List<Material> list2 = new ArrayList<>(list1);
 			Collections.shuffle(list2);
 			for (int i = 0; i < list1.size(); i++) {
+				getLogger().info("Key = " + list1.get(i).toString() + ", Value = " + list2.get(i).toString());
 				dropMap.put(list1.get(i), list2.get(i));
 			}
 		}
@@ -194,7 +195,7 @@ public class DeathSwapPlugin extends JavaPlugin {
 	public void setFirstSwapSecs(int firstSwapSecs) {
 		this.firstSwapSecs = firstSwapSecs;
 	}
-	
+
 	public Material getItemForBlock(Material mat) {
 		return dropMap.get(mat);
 	}
