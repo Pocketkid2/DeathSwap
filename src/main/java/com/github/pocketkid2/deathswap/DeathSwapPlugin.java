@@ -59,6 +59,12 @@ public class DeathSwapPlugin extends JavaPlugin {
 			getLogger().info("Lobby loaded as " + lobby.toString());
 		}
 
+		// Load extra features
+		randomItems = getConfig().getBoolean("random-items");
+		getLogger().info("Random items feature is turned " + (randomItems ? "on" : "off"));
+		blitzMode = getConfig().getBoolean("blitz-mode");
+		getLogger().info("Blitz mode is turned " + (blitzMode ? "on" : "off"));
+
 		// Initialize the game instance
 		game = new DeathSwapGame(this);
 
