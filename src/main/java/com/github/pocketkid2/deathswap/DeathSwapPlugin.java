@@ -14,11 +14,14 @@ public class DeathSwapPlugin extends JavaPlugin {
 
 	private DeathSwapGame game;
 	private World world;
+	private Location lobby;
+
 	private int radius;
 	private int startingTimeSecs;
 	private int swapTimeSecs;
 	private int firstSwapSecs;
-	private Location lobby;
+	private boolean randomItems;
+	private boolean blitzMode;
 
 	@Override
 	public void onEnable() {
@@ -133,5 +136,37 @@ public class DeathSwapPlugin extends JavaPlugin {
 
 	public String addPrefix(String message) {
 		return String.format("[%s%s%s] %s", ChatColor.RED, getDescription().getPrefix(), ChatColor.RESET, message);
+	}
+
+	public boolean isRandomItems() {
+		return randomItems;
+	}
+
+	public void setRandomItems(boolean randomItems) {
+		this.randomItems = randomItems;
+	}
+
+	public boolean isBlitzMode() {
+		return blitzMode;
+	}
+
+	public void setBlitzMode(boolean blitzMode) {
+		this.blitzMode = blitzMode;
+	}
+
+	public void setRadius(int radius) {
+		this.radius = radius;
+	}
+
+	public void setStartingTimeSecs(int startingTimeSecs) {
+		this.startingTimeSecs = startingTimeSecs;
+	}
+
+	public void setSwapTimeSecs(int swapTimeSecs) {
+		this.swapTimeSecs = swapTimeSecs;
+	}
+
+	public void setFirstSwapSecs(int firstSwapSecs) {
+		this.firstSwapSecs = firstSwapSecs;
 	}
 }

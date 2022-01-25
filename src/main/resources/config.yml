@@ -17,5 +17,11 @@ swap-time: 300
 # How many seconds after start does the first swap happen?
 first-swap: 600
 
+# Should random item drops be turned on?
+random-items: true
+
+# Should blitz mode be turned on? (World border starts at max radius and moves to the center)
+blitz-mode: true
+
 # The location of the lobby spawn (don't touch this, use the command and reload the plugin)
 lobby-spawn:
