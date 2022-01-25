@@ -4,17 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.bukkit.GameMode;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.ItemStack;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -85,6 +90,11 @@ public class DeathSwapListener implements Listener {
 			plugin.getLogger().info("Logging player respawn event for player " + event.getPlayer());
 			event.setRespawnLocation(plugin.getLobby());
 			respawns.remove(event.getPlayer());
+			
+			// Add this player as a spectator
+			event.getPlayer().setGameMode(GameMode.SPECTATOR);
+			event.getPlayer().sendMessage(ChatColor.AQUA + "You are now spectating the game!");
+			plugin.getGame().addSpectator(event.getPlayer());
 		}
 	}
 
@@ -93,6 +103,15 @@ public class DeathSwapListener implements Listener {
 		if (plugin.getGame().isSpectator(event.getPlayer()) && (event.getAction() == Action.LEFT_CLICK_AIR)) {
 			Random random = new Random();
 			plugin.getGame().getPlayers().get(random.nextInt(plugin.getGame().getPlayers().size()));
+		}
+	}
+	
+	@EventHandler
+	public void onBlockBreak(BlockBreakEvent event) {
+		if (plugin.isRandomItems() && plugin.getGame().isPlayer(event.getPlayer())) {
+			event.getBlock().getDrops().clear();
+			ItemStack stack1 = new ItemStack(plugin.getItemForBlock(event.getBlock().getType()));
+			event.getBlock().getDrops().add(stack1);
 		}
 	}
 }

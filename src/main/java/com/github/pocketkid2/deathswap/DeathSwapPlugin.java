@@ -1,9 +1,16 @@
 package com.github.pocketkid2.deathswap;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,6 +29,8 @@ public class DeathSwapPlugin extends JavaPlugin {
 	private int firstSwapSecs;
 	private boolean randomItems;
 	private boolean blitzMode;
+	
+	private Map<Material, Material> dropMap;
 
 	@Override
 	public void onEnable() {
@@ -64,6 +73,16 @@ public class DeathSwapPlugin extends JavaPlugin {
 		getLogger().info("Random items feature is turned " + (randomItems ? "on" : "off"));
 		blitzMode = getConfig().getBoolean("blitz-mode");
 		getLogger().info("Blitz mode is turned " + (blitzMode ? "on" : "off"));
+		
+		if (randomItems) {
+			dropMap = new HashMap<Material, Material>();
+			List<Material> list1 = Arrays.asList(Material.values());
+			List<Material> list2 = new ArrayList<>(list1);
+			Collections.shuffle(list2);
+			for (int i = 0; i < list1.size(); i++) {
+				dropMap.put(list1.get(i), list2.get(i));
+			}
+		}
 
 		// Initialize the game instance
 		game = new DeathSwapGame(this);
@@ -174,5 +193,9 @@ public class DeathSwapPlugin extends JavaPlugin {
 
 	public void setFirstSwapSecs(int firstSwapSecs) {
 		this.firstSwapSecs = firstSwapSecs;
+	}
+	
+	public Material getItemForBlock(Material mat) {
+		return dropMap.get(mat);
 	}
 }
