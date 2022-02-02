@@ -77,6 +77,7 @@ public class DeathSwapPlugin extends JavaPlugin {
 		if (randomItems) {
 			dropMap = new HashMap<Material, Material>();
 			List<Material> list1 = Arrays.asList(Material.values());
+			list1.remove(Material.AIR);
 			List<Material> list2 = new ArrayList<>(list1);
 			Collections.shuffle(list2);
 			for (int i = 0; i < list1.size(); i++) {
