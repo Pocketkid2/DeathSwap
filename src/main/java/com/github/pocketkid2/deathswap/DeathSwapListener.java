@@ -114,6 +114,7 @@ public class DeathSwapListener implements Listener {
 			event.setDropItems(false);
 			ItemStack stack1 = new ItemStack(plugin.getItemForBlock(event.getBlock().getType()));
 			plugin.getWorld().dropItemNaturally(event.getBlock().getLocation().add(0.5, 0.5, 0.5), stack1);
+			plugin.getLogger().info("Block of type " + event.getBlock().getType().toString() + " was broken by " + event.getPlayer() + " and will drop " + stack1.getType().toString());
 		}
 	}
 }
