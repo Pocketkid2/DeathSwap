@@ -93,6 +93,7 @@ public class DeathSwapPlugin extends JavaPlugin {
 
 		// Set up the listener
 		getServer().getPluginManager().registerEvents(new DeathSwapListener(this), this);
+		getServer().getPluginManager().registerEvents(new DeathSwapChunkListener(this), this);
 
 		// We're done, notify the console
 		getLogger().info("Enabled!");
